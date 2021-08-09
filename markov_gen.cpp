@@ -65,6 +65,7 @@ char find_next_char(const std::string& sample, const DICT& table, uint8_t k){
     assert(len >= k); // check that we have enough starting chars to match
 
     std::string snippet = sample.substr(len-k, k);
+    std::cout << "NEW WORD: " << snippet << std::endl;
     if(table.find(snippet) == table.end()) { return ' '; } // return a space if pattern not recognized
 
     // use const accessor .at() instead of [], which is not a const function
@@ -74,8 +75,10 @@ char find_next_char(const std::string& sample, const DICT& table, uint8_t k){
 
 std::string gen_text(const std::string& sample, const DICT& table, uint8_t k, int num_char){
     std::string text = sample;
+    uint8_t len = sample.length();
 
-    for(int i=0; i<num_char; i++){ // generate characters until we have num_char characters
+    for(int i = len-k; i<num_char; i++){ // generate characters until we have num_char characters
+        std::cout << "NEXT SUBSTR: " << text.substr(i,k+1) << std::endl; 
         text += find_next_char(text.substr(i,k+1), table, k);
     }
 
@@ -84,7 +87,7 @@ std::string gen_text(const std::string& sample, const DICT& table, uint8_t k, in
 
 int main(){
     std::fstream data_file;
-    data_file.open("data2.txt", std::ios::in); // open data1.txt for read
+    data_file.open("data4.txt", std::ios::in); // open data1.txt for read
     assert(data_file); // make sure file has been succesfully opened
 
     std::string data = std::string();
@@ -102,7 +105,7 @@ int main(){
     //     }
     // }
 
-    std::string text = gen_text("medi", result, k, 2000);
+    std::string text = gen_text("Namjoon", result, k, 2000);
     std::cout << "\n" << text;
 
     data_file.close();
